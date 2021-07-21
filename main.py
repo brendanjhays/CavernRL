@@ -5,8 +5,9 @@ from const import Settings
 from engine import Engine
 from input_handlers import EventHandler
 from event_queue import EventQueue
-from entity import Entity
 from dungeon_procgen import generate_dungeon
+import copy
+import entity_factories
 
 
 def main() -> None:
@@ -15,8 +16,7 @@ def main() -> None:
     )
 
     event_handler = EventHandler()
-    player = Entity(int(Settings.SCREEN_WIDTH/2),
-                    int(Settings.SCREEN_HEIGHT/2), "@", (255, 255, 255))
+    player = copy.deepcopy(entity_factories.player)
     game_map = generate_dungeon(
         max_rooms=Settings.MAX_ROOMS,
         room_min_size=Settings.ROOM_MIN_SIZE,

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from numpy import maximum
 from game_map import GameMap
+import entity_factories
 from typing import Tuple, Iterator, List, TYPE_CHECKING
 import tile_types
 import random
@@ -39,19 +40,20 @@ class RectangularRoom:
             and self.y2 >= other.y1
         )
 
+
 def place_entities(
     room: RectangularRoom, dungeon: GameMap, maximum_monsters: int,
 ) -> None:
     number_of_monsters = random.randint(0, maximum_monsters)
     for i in range(number_of_monsters):
-        x = random.randint(room.x1 + 1, room.x2 -1)
+        x = random.randint(room.x1 + 1, room.x2 - 1)
         y = random.randint(room.y1 + 1, room.y2 - 1)
 
         if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
             if random.random() < 0.8:
-                pass # Enemy type 1
+                entity_factories.orc.spawn(dungeon, x, y)
             else:
-                pass # Enemy type 2
+                entity_factories.troll.spawn(dungeon, x, y)
 
 
 def tunnel_between(
