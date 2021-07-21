@@ -23,6 +23,7 @@ def main() -> None:
         room_max_size=Settings.ROOM_MAX_SIZE,
         map_width=Settings.MAP_WIDTH,
         map_height=Settings.MAP_HEIGHT,
+        max_monsters_per_room=Settings.MAX_MONSTERS_PER_ROOM,
         player=player
     )
     engine = Engine(event_handler=event_handler,
