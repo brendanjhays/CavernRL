@@ -1,6 +1,6 @@
+from __future__ import annotations
 import numpy as np  # type: ignore
 from tcod.console import Console
-from __future__ import annotations
 from typing import Iterable, TYPE_CHECKING
 
 import tile_types
@@ -30,3 +30,7 @@ class GameMap:
             choicelist=[self.tiles["light"], self.tiles["dark"]],
             default=tile_types.SHROUD
         )
+
+        for entity in self.entities:
+            if self.visible[entity.x, entity.y]:
+                console.print(x=entity.x, y=entity.y, string=entity.char, fg=entity.color)
