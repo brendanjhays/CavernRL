@@ -4,7 +4,7 @@ from const import Settings
 
 import tcod.event
 
-from actions import Action, EscapeAction, MovementAction
+from actions import Action, BumpAction, EscapeAction
 
 
 class EventHandler(tcod.event.EventDispatch[Action]):
@@ -27,7 +27,7 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             return action
 
         if any(EventQueue.queue.__contains__(movement_key) for movement_key in Settings.MOVEMENT_KEYS):
-            action = MovementAction(dx=0, dy=0)
+            action = BumpAction(dx=0, dy=0)
 
         if EventQueue.queue.__contains__(Settings.UP):
             action.dy -= 1

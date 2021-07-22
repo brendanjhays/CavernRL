@@ -34,6 +34,25 @@ class ActionWithDirection(Action):
     def perform(self, engine: Engine, entity: Entity) -> None:
         raise NotImplementedError
 
+class MeleeAction(ActionWithDirection):
+    def perform(self, engine: Engine, entity: Entity) -> None:
+        dest_x = entity.x + self.dx
+        dest_y = entity.y + self.dy
+        target = engine.game_map.get_blocking_entity(dest_x, dest_y)
+        if not target:
+            return
+        print(f"You hit the {target.name}")
+
+class BumpAction(ActionWithDirection):
+    def perform(self, engine: Engine, entity: Entity) -> None:
+        dest_x = entity.x + self.dx
+        dest_y = entity.y + self.dy
+
+        if engine.game_map.get_blocking_entity(dest_x, dest_y):
+            return MeleeAction(self.dx, self.dy).perform(engine, entity)
+        else:
+            return MovementAction(self.dx, self.dy).perform(engine, entity)
+
 class MovementAction(ActionWithDirection):
     def perform(self, engine: Engine, entity: Entity) -> None:
         dest_x = entity.x + self.dx
