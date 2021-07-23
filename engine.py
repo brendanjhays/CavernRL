@@ -21,8 +21,9 @@ class Engine:
         self.player = player
 
     def handle_enemy_turns(self) -> None:
-        for entity in self.game_map.entities - {self.player}:
-            print(f'The {entity.name} waits')
+        for entity in self.game_map.actors:
+            if entity.ai and entity != self.player:
+                entity.ai.perform()
 
     def update_fov(self) -> None:
         """Recompute visible area based on the player"""

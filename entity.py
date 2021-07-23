@@ -58,7 +58,7 @@ class Entity:
 
 
 class Actor(Entity):
-    def __init(
+    def __init__(
         self,
         *,
         x: int = 0,

@@ -1,8 +1,9 @@
 from __future__ import annotations
 import numpy as np  # type: ignore
 from tcod.console import Console
-from typing import Iterable, Optional, TYPE_CHECKING
+from typing import Iterable, Iterator, Optional, TYPE_CHECKING
 
+from entity import Actor
 import tile_types
 
 if TYPE_CHECKING:
@@ -20,6 +21,21 @@ class GameMap:
 
         self.visible = np.full((width, height), fill_value=False, order="F")
         self.explored = np.full((width, height), fill_value=False, order="F")
+
+    @property
+    def actors(self) -> Iterator[Actor]:
+        yield from (
+            entity
+            for entity in self.entities
+            if isinstance(entity, Actor) and entity.is_alive
+        )
+
+    def get_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
+        for actor in self.actors:
+            if actor.x == x and actor.y == y:
+                return actor
+
+        return None
 
     def get_blocking_entity(self, location_x: int, location_y: int) -> Optional[Entity]:
         for entity in self.entities:
