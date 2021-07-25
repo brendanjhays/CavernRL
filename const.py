@@ -6,7 +6,7 @@ class Settings:
     SCREEN_WIDTH = 80
     SCREEN_HEIGHT = 50
     VSYNC = True
-    TITLE = "I'm too lazy to come up with a title"
+    TITLE = "AMong Us"
 
     ### General Information ###
 
