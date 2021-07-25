@@ -1,9 +1,7 @@
-from event_queue import EventQueue
 from typing import Set
 import tcod
 from const import Settings
 from engine import Engine
-from event_queue import EventQueue
 from dungeon_procgen import generate_dungeon
 import copy
 import entity_factories

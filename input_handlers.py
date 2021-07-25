@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from tcod.event_constants import K_PAGEDOWN, K_PAGEUP
-from event_queue import EventQueue
 from typing import Optional, TYPE_CHECKING
 from const import Settings
 
