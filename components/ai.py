@@ -6,14 +6,11 @@ import numpy as np
 import tcod
 
 from actions import Action, MeleeAction, MovementAction, WaitAction
-from components.base_component import BaseComponent
 
 if TYPE_CHECKING:
     from entity import Actor
 
-class BaseAI(Action, BaseComponent):
-    
-    entity: Actor
+class BaseAI(Action):
 
     def perform(self) -> None:
         raise NotImplementedError()
@@ -23,7 +20,7 @@ class BaseAI(Action, BaseComponent):
 
         for entity in self.entity.gamemap.entities:
             if entity.blocks_movement and cost[entity.x, entity.y]:
-                cost[entity.x, entity.y] += 10
+                cost[entity.x, entity.y] += 10 # Lower value means more clumping, higher value means more diverse actions
 
         graph = tcod.path.SimpleGraph(cost=cost, cardinal=2, diagonal=3)
         pathfinder = tcod.path.Pathfinder(graph)

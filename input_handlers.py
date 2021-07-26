@@ -122,13 +122,15 @@ class GameOverEventHandler(EventHandler):
 
             action.perform()
 
-    def ev_kewdown(self, event: tcod.event.KeyDown) -> Optional[Action]:
+    def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[Action]:
         action: Optional[Action] = None
 
         key = event.sym
 
         if key == tcod.event.K_ESCAPE:
             action = EscapeAction(self.engine.player)
+        elif key == tcod.event.K_v:
+            self.engine.event_handler = HistoryViewer(self.engine)
 
         return action
 
@@ -178,5 +180,7 @@ class HistoryViewer(EventHandler):
         elif event.sym == tcod.event.K_END:
             # Move directly to the last message.
             self.cursor = self.log_length - 1
-        else:  # Any other key moves back to the main game state.
+        elif self.engine.player.is_alive:
             self.engine.event_handler = MainGameEventHandler(self.engine)
+        else:
+            self.engine.event_handler = GameOverEventHandler(self.engine)
