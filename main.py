@@ -39,8 +39,10 @@ def main() -> None:
         root_console = tcod.Console(
             Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT, order="F")
         while True:
-            engine.render(console=root_console, context=context)
-            engine.event_handler.handle_events()
+            root_console.clear()
+            engine.event_handler.on_render(console=root_console)
+            context.present(root_console)
+            engine.event_handler.handle_events(context)
 
 
 if __name__ == "__main__":
