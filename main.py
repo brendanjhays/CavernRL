@@ -5,6 +5,7 @@ from engine import Engine
 from dungeon_procgen import generate_dungeon
 import copy
 import entity_factories
+import traceback
 
 
 def main() -> None:
@@ -42,7 +43,14 @@ def main() -> None:
             root_console.clear()
             engine.event_handler.on_render(console=root_console)
             context.present(root_console)
-            engine.event_handler.handle_events(context)
+            
+            try:
+                for event in tcod.event.wait():
+                    context.convert_event(event)
+                    engine.event_handler.handle_events(event)
+            except Exception:
+                traceback.print_exc()
+                engine.message_log.add_message(traceback.format_exc(), Colors.error)
 
 
 if __name__ == "__main__":

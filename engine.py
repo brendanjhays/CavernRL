@@ -26,6 +26,7 @@ class Engine:
 
     def update_tick(self) -> None:
         self.handle_enemy_turns()
+        self.update_fov()
         for entity in self.game_map.actors:
             entity.fighter.hp += entity.fighter.regeneration
         pass

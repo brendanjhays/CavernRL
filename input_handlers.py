@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from tcod.event_constants import K_PAGEDOWN, K_PAGEUP
 from typing import Optional, TYPE_CHECKING
-from const import Settings
+from const import Settings, Colors
 
 import tcod
 
 from actions import Action, BumpAction, EscapeAction, WaitAction
+import exceptions
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -59,10 +60,22 @@ class EventHandler(tcod.event.EventDispatch[Action]):
     def __init__(self, engine: Engine) -> None:
         self.engine = engine
 
-    def handle_events(self, context: tcod.context.Context) -> None:
-        for event in tcod.event.wait():
-            context.convert_event(event)
-            self.dispatch(event)
+    def handle_events(self, event: tcod.event.Event) -> None:
+        self.handle_action(self.dispatch(event))
+
+    def handle_action(self, action: Optional[Action]) -> bool:
+        #Returns true if action will advance a turn
+        if action is None:
+            return False
+        
+        try:
+            action.perform()
+        except exceptions.Impossible as exc:
+            self.engine.message_log.add_message(exc.args[0], Colors.impossible)
+            return False
+
+        self.engine.update_tick()
+
 
     def ev_mousemotion(self, event: tcod.event.MouseMotion) -> None:
         if self.engine.game_map.in_bounds(event.tile.x, event.tile.y):
@@ -78,19 +91,6 @@ class EventHandler(tcod.event.EventDispatch[Action]):
 class MainGameEventHandler(EventHandler):
     def __init__(self, engine: Engine) -> None:
         self.engine = engine
-
-    def handle_events(self, context: tcod.context.Context) -> None:
-        for event in tcod.event.wait():
-            context.convert_event(event)
-
-            action = self.dispatch(event)
-
-            if action is None:
-                continue
-            action.perform()
-
-            self.engine.update_tick()
-            self.engine.update_fov()
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:
         action: Optional[Action] = None
@@ -113,23 +113,10 @@ class MainGameEventHandler(EventHandler):
 
 
 class GameOverEventHandler(EventHandler):
-    def handle_events(self, context: tcod.context.Context) -> None:
-        for event in tcod.event.wait():
-            action = self.dispatch(event)
-
-            if action is None:
-                continue
-
-            action.perform()
-
     def ev_keydown(self, event: tcod.event.KeyDown) -> Optional[Action]:
-        action: Optional[Action] = None
-
-        key = event.sym
-
-        if key == tcod.event.K_ESCAPE:
+        if event.sym == tcod.event.K_ESCAPE:
             action = EscapeAction(self.engine.player)
-        elif key == tcod.event.K_v:
+        elif event.sym == tcod.event.K_v:
             self.engine.event_handler = HistoryViewer(self.engine)
 
         return action
