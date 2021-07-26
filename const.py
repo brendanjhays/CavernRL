@@ -11,7 +11,7 @@ class Settings:
     ### General Information ###
 
     ### Map Information ###
-    MAP_HEIGHT = 45
+    MAP_HEIGHT = 43
     MAP_WIDTH = 80
     ROOM_MAX_SIZE = 10
     ROOM_MIN_SIZE = 6

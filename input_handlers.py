@@ -70,7 +70,7 @@ class MainGameEventHandler(tcod.event.EventDispatch[Action]):
                 continue
             action.perform()
 
-            self.engine.handle_enemy_turns()
+            self.engine.update_tick()
             self.engine.update_fov()
 
     def ev_keydown(self, event: tcod.event.KeyDown) -> None:

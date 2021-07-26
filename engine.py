@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from numpy import maximum
 from render_functions import render_bar
-
+from message_log import MessageLog
 from typing import TYPE_CHECKING
 from tcod.context import Context
 from tcod.console import Console
@@ -22,6 +22,13 @@ class Engine:
     def __init__(self, player: Actor):
         self.event_handler: EventHandler = MainGameEventHandler(self)
         self.player = player
+        self.message_log = MessageLog()
+
+    def update_tick(self) -> None:
+        self.handle_enemy_turns()
+        for entity in self.game_map.actors:
+            entity.fighter.hp += entity.fighter.regeneration
+        pass
 
     def handle_enemy_turns(self) -> None:
         for entity in self.game_map.actors:
@@ -39,6 +46,7 @@ class Engine:
 
     def render(self, console: Console, context: Context) -> None:
         self.game_map.render(console)
+        self.message_log.render(console=console, x=21, y=45, width=40, height=5)
 
         render_bar(
             console=console,

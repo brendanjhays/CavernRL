@@ -1,6 +1,6 @@
 from typing import Set
 import tcod
-from const import Settings
+from const import Settings, Colors
 from engine import Engine
 from dungeon_procgen import generate_dungeon
 import copy
@@ -24,6 +24,10 @@ def main() -> None:
         engine=engine
     )
     engine.update_fov()
+
+    engine.message_log.add_message(
+        "You wake up in a musty cave, with all of your belongings gone", Colors.welcome_text
+    )
 
     with tcod.context.new_terminal(
             Settings.SCREEN_WIDTH,
