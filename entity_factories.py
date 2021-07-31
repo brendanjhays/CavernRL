@@ -1,6 +1,7 @@
-from entity import Actor
+from entity import Actor, Item
 from components.ai import BaseAI, HostileEnemy
 from components.fighter import Fighter
+from components.consumable import Consumable, HealingConsumable
 
 player = Actor(
     char="@",
@@ -24,5 +25,12 @@ troll = Actor(
     name="Troll",
     ai_cls=HostileEnemy,
     fighter=Fighter(hp=18, defense=1, power=5, regeneration=0),
+)
+
+health_potion = Item(
+    char="!",
+    color=(127, 0, 255),
+    name="Health Potion",
+    consumable=HealingConsumable(amount=4)
 )
 

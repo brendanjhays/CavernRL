@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 from tcod.console import Console
 from tcod.map import compute_fov
 from input_handlers import MainGameEventHandler
+import exceptions
 
 if TYPE_CHECKING:
     from entity import Actor
@@ -34,7 +35,12 @@ class Engine:
     def handle_enemy_turns(self) -> None:
         for entity in self.game_map.actors:
             if entity.ai and entity != self.player:
-                entity.ai.perform()
+                try:
+                    entity.ai.perform()
+                except exceptions.Impossible:
+                    pass
+
+                    
 
     def update_fov(self) -> None:
         """Recompute visible area based on the player"""

@@ -31,11 +31,11 @@ def main() -> None:
     )
 
     with tcod.context.new_terminal(
-            Settings.SCREEN_WIDTH,
-            Settings.SCREEN_HEIGHT,
-            tileset=tileset,
-            title=Settings.TITLE,
-            vsync=Settings.VSYNC
+        Settings.SCREEN_WIDTH,
+        Settings.SCREEN_HEIGHT,
+        tileset=tileset,
+        title=Settings.TITLE,
+        vsync=Settings.VSYNC
     ) as context:
         root_console = tcod.Console(
             Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT, order="F")
@@ -43,14 +43,15 @@ def main() -> None:
             root_console.clear()
             engine.event_handler.on_render(console=root_console)
             context.present(root_console)
-            
+
             try:
                 for event in tcod.event.wait():
                     context.convert_event(event)
                     engine.event_handler.handle_events(event)
             except Exception:
                 traceback.print_exc()
-                engine.message_log.add_message(traceback.format_exc(), Colors.error)
+                engine.message_log.add_message(
+                    traceback.format_exc(), Colors.error)
 
 
 if __name__ == "__main__":
